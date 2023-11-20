@@ -238,7 +238,7 @@ packages:
       path: "packages/yumemi_weather"
       ref: main
       resolved-ref: ab79b8c0f2953b96ae18ea2795f36c78c646760a
-      url: "git@github.com:yumemi-inc/flutter-training-template.git"
+      url: "https://github.com/yumemi-inc/flutter-training-template.git"
     source: git
     version: "1.0.0"
 sdks:

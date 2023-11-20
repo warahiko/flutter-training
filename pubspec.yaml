@@ -12,7 +12,7 @@ dependencies:
   flutter_svg: ^2.0.9
   yumemi_weather:
     git:
-      url: git@github.com:yumemi-inc/flutter-training-template.git
+      url: https://github.com/yumemi-inc/flutter-training-template.git
       ref: main
       path: packages/yumemi_weather
 
