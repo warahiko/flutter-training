@@ -3,14 +3,14 @@ import 'package:flutter_training/forecast.dart';
 import 'package:flutter_training/forecast_view.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MainAppState();
+  State<StatefulWidget> createState() => _MainScreenState();
 }
 
-class _MainAppState extends State<MainApp> {
+class _MainScreenState extends State<MainScreen> {
   final YumemiWeather _yumemiWeather = YumemiWeather();
   Forecast? _forecast;
 
