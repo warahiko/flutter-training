@@ -35,7 +35,9 @@ class _MainAppState extends State<MainApp> {
             child: Column(
               children: [
                 const Spacer(),
-                const ForecastView(),
+                ForecastView(
+                  forecast: _forecast,
+                ),
                 Flexible(
                   child: Padding(
                     padding: const EdgeInsets.only(top: 80),
