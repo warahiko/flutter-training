@@ -21,6 +21,10 @@ class _MainScreenState extends State<MainScreen> {
     });
   }
 
+  void _close(BuildContext context) {
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,6 +42,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 80),
                     child: _OperationButtonSet(
+                      onClose: () => _close(context),
                       onReload: _fetchForecast,
                     ),
                   ),
@@ -53,9 +58,12 @@ class _MainScreenState extends State<MainScreen> {
 
 class _OperationButtonSet extends StatelessWidget {
   const _OperationButtonSet({
+    required VoidCallback onClose,
     required VoidCallback onReload,
-  }) : _onReload = onReload;
+  })  : _onClose = onClose,
+        _onReload = onReload;
 
+  final VoidCallback _onClose;
   final VoidCallback _onReload;
 
   @override
@@ -64,7 +72,7 @@ class _OperationButtonSet extends StatelessWidget {
       children: [
         Expanded(
           child: TextButton(
-            onPressed: () {},
+            onPressed: _onClose,
             child: const Text('Close'),
           ),
         ),
