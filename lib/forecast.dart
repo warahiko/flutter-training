@@ -11,7 +11,7 @@ enum Forecast {
   factory Forecast.from(String name) {
     return Forecast.values.singleWhere(
           (element) => element.name == name,
-      orElse: () => throw ArgumentError('No enum value for `$name`.'),
+      orElse: () => throw Exception('No enum value for `$name`.'),
     );
   }
 
