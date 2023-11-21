@@ -8,12 +8,12 @@ enum Forecast {
     required this.image,
   });
 
-  final String image;
-
-  static Forecast from(String name) {
+  factory Forecast.from(String name) {
     return Forecast.values.singleWhere(
-      (element) => element.name == name,
+          (element) => element.name == name,
       orElse: () => throw ArgumentError('No enum value for `$name`.'),
     );
   }
+
+  final String image;
 }
