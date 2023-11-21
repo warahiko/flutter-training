@@ -39,8 +39,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
+    return Scaffold(
+      body: Container(
         color: Colors.green,
       ),
     );

@@ -27,28 +27,26 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: FractionallySizedBox(
-            widthFactor: 0.5,
-            child: Column(
-              children: [
-                const Spacer(),
-                ForecastView(
-                  forecast: _forecast,
-                ),
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 80),
-                    child: _OperationButtonSet(
-                      onClose: () => _close(context),
-                      onReload: _fetchForecast,
-                    ),
+    return Scaffold(
+      body: Center(
+        child: FractionallySizedBox(
+          widthFactor: 0.5,
+          child: Column(
+            children: [
+              const Spacer(),
+              ForecastView(
+                forecast: _forecast,
+              ),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 80),
+                  child: _OperationButtonSet(
+                    onClose: () => _close(context),
+                    onReload: _fetchForecast,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
