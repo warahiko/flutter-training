@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_training/forecast.dart';
 import 'package:flutter_training/forecast_view.dart';
+import 'package:flutter_training/model/forecast.dart';
 import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 

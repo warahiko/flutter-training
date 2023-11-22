@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_training/weather.dart';
+import 'package:flutter_training/model/weather.dart';
 
 class Forecast {
   const Forecast({
