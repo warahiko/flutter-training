@@ -10,6 +10,12 @@ class ForecastView extends StatelessWidget {
 
   final Forecast? _forecast;
 
+  String _toTemperatureString(int? temperature) {
+    final temperatureValue =
+        temperature == null ? '**' : temperature.toString();
+    return '$temperatureValue ℃';
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -28,7 +34,7 @@ class ForecastView extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                '** ℃',
+                _toTemperatureString(_forecast?.minTemperature),
                 style: labelLarge.copyWith(
                   color: Colors.blue,
                 ),
@@ -37,7 +43,7 @@ class ForecastView extends StatelessWidget {
             ),
             Expanded(
               child: Text(
-                '** ℃',
+                _toTemperatureString(_forecast?.maxTemperature),
                 style: labelLarge.copyWith(
                   color: Colors.red,
                 ),
