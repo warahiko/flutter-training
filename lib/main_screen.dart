@@ -1,8 +1,9 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_training/forecast.dart';
 import 'package:flutter_training/forecast_view.dart';
-import 'package:flutter_training/weather.dart';
 import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -15,12 +16,18 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final YumemiWeather _yumemiWeather = YumemiWeather();
-  Weather? _weather;
+  Forecast? _forecast;
 
   void _fetchForecast() {
-    final Weather newWeather;
+    const request = {
+      'area': 'tokyo',
+      'date': '2023-11-22T00:00:00+09:00',
+    };
+    final requestString = jsonEncode(request);
+
+    final Forecast newForecast;
     try {
-      newWeather = Weather.from(_yumemiWeather.fetchThrowsWeather('tokyo'));
+      newForecast = Forecast.from(_yumemiWeather.fetchWeather(requestString));
     } on YumemiWeatherError catch (e) {
       unawaited(_showErrorDialog(e.toMessage()));
       return;
@@ -30,7 +37,7 @@ class _MainScreenState extends State<MainScreen> {
       return;
     }
     setState(() {
-      _weather = newWeather;
+      _forecast = newForecast;
     });
   }
 
@@ -79,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               const Spacer(),
               ForecastView(
-                weather: _weather,
+                weather: _forecast?.weather,
               ),
               Flexible(
                 child: Padding(
