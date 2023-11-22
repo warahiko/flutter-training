@@ -10,7 +10,7 @@ class Forecast {
   });
 
   factory Forecast.from(String jsonString) {
-    final decoded = jsonDecode(jsonString);
+    final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
 
     return Forecast(
       weather: Weather.from(decoded['weather_condition'] as String),
