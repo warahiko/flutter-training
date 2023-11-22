@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training/end_of_frame_listener_mixin.dart';
+import 'package:flutter_training/screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,17 +29,15 @@ class _SplashScreenState extends State<SplashScreen>
       return;
     }
     // 遷移先から戻るまで待機
-    await Navigator.pushNamed(context, '/main');
+    await Navigator.pushNamed(context, Screen.main.route);
 
     unawaited(listenEndOfFrame());
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.green,
-      ),
+    return const Scaffold(
+      backgroundColor: Colors.green,
     );
   }
 }
