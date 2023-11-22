@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_training/forecast.dart';
 import 'package:flutter_training/forecast_view.dart';
+import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,10 +18,51 @@ class _MainScreenState extends State<MainScreen> {
   Forecast? _forecast;
 
   void _fetchForecast() {
-    final newForecast = Forecast.from(_yumemiWeather.fetchSimpleWeather());
+    final Forecast newForecast;
+    try {
+      newForecast = Forecast.from(_yumemiWeather.fetchThrowsWeather('tokyo'));
+    } on YumemiWeatherError catch (e) {
+      unawaited(_showErrorDialog(e.toMessage()));
+      return;
+    } on Exception catch (_) {
+      const message = '不明なエラーです。';
+      unawaited(_showErrorDialog(message));
+      return;
+    }
     setState(() {
       _forecast = newForecast;
     });
+  }
+
+  Future<void> _showErrorDialog(String message) async {
+    if (!context.mounted) {
+      return;
+    }
+
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('エラー'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(message),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void _close(BuildContext context) {
