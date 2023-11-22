@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_training/screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -29,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
       return;
     }
     // 遷移先から戻るまで待機
-    await Navigator.pushNamed(context, '/main');
+    await Navigator.pushNamed(context, Screen.main.route);
 
     if (!context.mounted) {
       return;
