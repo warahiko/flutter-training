@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_training/forecast.dart';
+import 'package:flutter_training/weather.dart';
 
 class ForecastView extends StatelessWidget {
   const ForecastView({
-    required Forecast? forecast,
+    required Weather? weather,
     super.key,
-  }) : _forecast = forecast;
+  }) : _weather = weather;
 
-  final Forecast? _forecast;
+  final Weather? _weather;
 
   @override
   Widget build(BuildContext context) {
@@ -19,9 +19,9 @@ class ForecastView extends StatelessWidget {
       children: [
         AspectRatio(
           aspectRatio: 1,
-          child: _forecast == null
+          child: _weather == null
               ? const Placeholder()
-              : SvgPicture.asset(_forecast.image),
+              : SvgPicture.asset(_weather.image),
         ),
         const SizedBox(height: 16),
         Row(

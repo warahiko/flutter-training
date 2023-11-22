@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_training/forecast.dart';
 import 'package:flutter_training/forecast_view.dart';
+import 'package:flutter_training/weather.dart';
 import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
@@ -15,12 +15,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final YumemiWeather _yumemiWeather = YumemiWeather();
-  Forecast? _forecast;
+  Weather? _weather;
 
   void _fetchForecast() {
-    final Forecast newForecast;
+    final Weather newWeather;
     try {
-      newForecast = Forecast.from(_yumemiWeather.fetchThrowsWeather('tokyo'));
+      newWeather = Weather.from(_yumemiWeather.fetchThrowsWeather('tokyo'));
     } on YumemiWeatherError catch (e) {
       unawaited(_showErrorDialog(e.toMessage()));
       return;
@@ -30,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
       return;
     }
     setState(() {
-      _forecast = newForecast;
+      _weather = newWeather;
     });
   }
 
@@ -79,7 +79,7 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               const Spacer(),
               ForecastView(
-                forecast: _forecast,
+                weather: _weather,
               ),
               Flexible(
                 child: Padding(
