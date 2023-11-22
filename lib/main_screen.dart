@@ -86,7 +86,7 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               const Spacer(),
               ForecastView(
-                weather: _forecast?.weather,
+                forecast: _forecast,
               ),
               Flexible(
                 child: Padding(
