@@ -1,25 +1,28 @@
 import 'dart:convert';
 
 import 'package:flutter_training/model/weather.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Forecast {
-  const Forecast({
-    required this.weather,
-    required this.maxTemperature,
-    required this.minTemperature,
-  });
+part 'forecast.freezed.dart';
+part 'forecast.g.dart';
 
-  factory Forecast.from(String jsonString) {
-    final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
+@freezed
+class Forecast with _$Forecast {
+  const factory Forecast({
+    @JsonKey(name: 'weather_condition') required Weather weather,
+    required int maxTemperature,
+    required int minTemperature,
+  }) = _Forecast;
 
-    return Forecast(
-      weather: Weather.from(decoded['weather_condition'] as String),
-      minTemperature: decoded['min_temperature'] as int,
-      maxTemperature: decoded['max_temperature'] as int,
-    );
+  factory Forecast.fromJson(Map<String, dynamic> json) =>
+      _$ForecastFromJson(json);
+
+  factory Forecast.fromJsonString(String json) {
+    final decoded = jsonDecode(json) as Map<String, dynamic>?;
+    if (decoded == null) {
+      throw Exception('Invalid format: $json.');
+    }
+
+    return Forecast.fromJson(decoded);
   }
-
-  final Weather weather;
-  final int maxTemperature;
-  final int minTemperature;
 }

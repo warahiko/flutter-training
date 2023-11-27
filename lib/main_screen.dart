@@ -27,7 +27,8 @@ class _MainScreenState extends State<MainScreen> {
 
     final Forecast newForecast;
     try {
-      newForecast = Forecast.from(_yumemiWeather.fetchWeather(requestString));
+      final responseString = _yumemiWeather.fetchWeather(requestString);
+      newForecast = Forecast.fromJsonString(responseString);
     } on YumemiWeatherError catch (e) {
       unawaited(_showErrorDialog(e.toMessage()));
       return;
