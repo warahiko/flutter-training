@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_training/main_screen.dart';
+import 'package:flutter_training/ui/main/main_screen.dart';
 import 'package:flutter_training/ui/screen.dart';
 import 'package:flutter_training/ui/splash/splash_screen.dart';
 
