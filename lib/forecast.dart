@@ -1,19 +1,25 @@
-enum Forecast {
-  sunny(image: 'assets/sunny.svg'),
-  cloudy(image: 'assets/cloudy.svg'),
-  rainy(image: 'assets/rainy.svg'),
-  ;
+import 'dart:convert';
 
+import 'package:flutter_training/weather.dart';
+
+class Forecast {
   const Forecast({
-    required this.image,
+    required this.weather,
+    required this.maxTemperature,
+    required this.minTemperature,
   });
 
-  factory Forecast.from(String name) {
-    return Forecast.values.singleWhere(
-      (element) => element.name == name,
-      orElse: () => throw Exception('No enum value for `$name`.'),
+  factory Forecast.from(String jsonString) {
+    final decoded = jsonDecode(jsonString) as Map<String, dynamic>;
+
+    return Forecast(
+      weather: Weather.from(decoded['weather_condition'] as String),
+      minTemperature: decoded['min_temperature'] as int,
+      maxTemperature: decoded['max_temperature'] as int,
     );
   }
 
-  final String image;
+  final Weather weather;
+  final int maxTemperature;
+  final int minTemperature;
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training/forecast.dart';
@@ -18,9 +19,15 @@ class _MainScreenState extends State<MainScreen> {
   Forecast? _forecast;
 
   void _fetchForecast() {
+    const request = {
+      'area': 'tokyo',
+      'date': '2023-11-22T00:00:00+09:00',
+    };
+    final requestString = jsonEncode(request);
+
     final Forecast newForecast;
     try {
-      newForecast = Forecast.from(_yumemiWeather.fetchThrowsWeather('tokyo'));
+      newForecast = Forecast.from(_yumemiWeather.fetchWeather(requestString));
     } on YumemiWeatherError catch (e) {
       unawaited(_showErrorDialog(e.toMessage()));
       return;
