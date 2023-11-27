@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training/forecast_view.dart';
+import 'package:flutter_training/model/fetch_weather_request.dart';
 import 'package:flutter_training/model/forecast.dart';
 import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
@@ -19,11 +20,11 @@ class _MainScreenState extends State<MainScreen> {
   Forecast? _forecast;
 
   void _fetchForecast() {
-    const request = {
-      'area': 'tokyo',
-      'date': '2023-11-22T00:00:00+09:00',
-    };
-    final requestString = jsonEncode(request);
+    final request = FetchWeatherRequest(
+      area: 'tokyo',
+      date: DateTime.now(),
+    );
+    final requestString = jsonEncode(request.toJson());
 
     final Forecast newForecast;
     try {
