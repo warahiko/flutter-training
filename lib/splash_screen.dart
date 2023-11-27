@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training/end_of_frame_listener_mixin.dart';
-import 'package:flutter_training/screen.dart';
+import 'package:flutter_training/ui/screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
