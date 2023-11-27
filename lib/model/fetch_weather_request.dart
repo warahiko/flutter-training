@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_training/date_time_converter.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -11,6 +13,11 @@ class FetchWeatherRequest with _$FetchWeatherRequest {
     @DateTimeConverter() required DateTime date,
   }) = _FetchWeatherRequest;
 
+  // https://pub.dev/packages/freezed#adding-getters-and-methods-to-our-models
+  const FetchWeatherRequest._();
+
   factory FetchWeatherRequest.fromJson(Map<String, dynamic> json) =>
       _$FetchWeatherRequestFromJson(json);
+
+  String toJsonString() => jsonEncode(toJson());
 }

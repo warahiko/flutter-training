@@ -108,9 +108,10 @@ class __$$FetchWeatherRequestImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$FetchWeatherRequestImpl implements _FetchWeatherRequest {
+class _$FetchWeatherRequestImpl extends _FetchWeatherRequest {
   const _$FetchWeatherRequestImpl(
-      {required this.area, @DateTimeConverter() required this.date});
+      {required this.area, @DateTimeConverter() required this.date})
+      : super._();
 
   factory _$FetchWeatherRequestImpl.fromJson(Map<String, dynamic> json) =>
       _$$FetchWeatherRequestImplFromJson(json);
@@ -154,11 +155,12 @@ class _$FetchWeatherRequestImpl implements _FetchWeatherRequest {
   }
 }
 
-abstract class _FetchWeatherRequest implements FetchWeatherRequest {
+abstract class _FetchWeatherRequest extends FetchWeatherRequest {
   const factory _FetchWeatherRequest(
           {required final String area,
           @DateTimeConverter() required final DateTime date}) =
       _$FetchWeatherRequestImpl;
+  const _FetchWeatherRequest._() : super._();
 
   factory _FetchWeatherRequest.fromJson(Map<String, dynamic> json) =
       _$FetchWeatherRequestImpl.fromJson;

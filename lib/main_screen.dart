@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_training/forecast_view.dart';
@@ -20,11 +19,10 @@ class _MainScreenState extends State<MainScreen> {
   Forecast? _forecast;
 
   void _fetchForecast() {
-    final request = FetchWeatherRequest(
+    final requestString = FetchWeatherRequest(
       area: 'tokyo',
       date: DateTime.now(),
-    );
-    final requestString = jsonEncode(request.toJson());
+    ).toJsonString();
 
     final Forecast newForecast;
     try {
