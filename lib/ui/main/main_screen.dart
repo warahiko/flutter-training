@@ -1,75 +1,58 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_training/model/fetch_weather_request.dart';
-import 'package:flutter_training/model/forecast.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_training/ui/main/provider/main_screen_state_notifier.dart';
 import 'package:flutter_training/ui/main/view/forecast_view.dart';
-import 'package:flutter_training/yumemi_weather_error.dart';
-import 'package:yumemi_weather/yumemi_weather.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
-  @override
-  State<StatefulWidget> createState() => _MainScreenState();
-}
-
-class _MainScreenState extends State<MainScreen> {
-  final YumemiWeather _yumemiWeather = YumemiWeather();
-  Forecast? _forecast;
-
-  void _fetchForecast() {
-    final requestString = FetchWeatherRequest(
-      area: 'tokyo',
-      date: DateTime.now(),
-    ).toJsonString();
-
-    final Forecast newForecast;
-    try {
-      final responseString = _yumemiWeather.fetchWeather(requestString);
-      newForecast = Forecast.fromJsonString(responseString);
-    } on YumemiWeatherError catch (e) {
-      unawaited(_showErrorDialog(e.toMessage()));
-      return;
-    } on Exception catch (_) {
-      const message = '不明なエラーです。';
-      unawaited(_showErrorDialog(message));
-      return;
-    }
-    setState(() {
-      _forecast = newForecast;
-    });
+  void _fetchForecast(WidgetRef ref) {
+    ref.read(mainScreenStateNotifierProvider.notifier).fetchWeather();
   }
 
-  Future<void> _showErrorDialog(String message) async {
-    if (!context.mounted) {
-      return;
-    }
+  void _showErrorDialog(
+    BuildContext context,
+    WidgetRef ref,
+    String message,
+  ) {
+    unawaited(() async {
+      // Widget の build が完了するまで待つ
+      await SchedulerBinding.instance.endOfFrame;
 
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('エラー'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: <Widget>[
-                Text(message),
-              ],
+      if (!context.mounted) {
+        return;
+      }
+
+      await showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('エラー'),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: <Widget>[
+                  Text(message),
+                ],
+              ),
             ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+            actions: <Widget>[
+              TextButton(
+                child: const Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+
+      ref.read(mainScreenStateNotifierProvider.notifier).errorMessageShown();
+    }());
   }
 
   void _close(BuildContext context) {
@@ -77,7 +60,14 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(mainScreenStateNotifierProvider);
+
+    final errorMessage = state.errorMessage;
+    if (errorMessage != null) {
+      _showErrorDialog(context, ref, errorMessage);
+    }
+
     return Scaffold(
       body: Center(
         child: FractionallySizedBox(
@@ -86,14 +76,14 @@ class _MainScreenState extends State<MainScreen> {
             children: [
               const Spacer(),
               ForecastView(
-                forecast: _forecast,
+                forecast: state.forecast,
               ),
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 80),
                   child: _OperationButtonSet(
                     onClose: () => _close(context),
-                    onReload: _fetchForecast,
+                    onReload: () => _fetchForecast(ref),
                   ),
                 ),
               ),
