@@ -1,2 +1,7 @@
 # https://pub.dev/packages/yumemi_lints
 include: package:yumemi_lints/flutter/3.16.0/recommended.yaml
+
+analyzer:
+  errors:
+    # https://pub.dev/packages/freezed#install
+    invalid_annotation_target: ignore

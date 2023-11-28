@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_training/forecast.dart';
+import 'package:flutter_training/model/forecast.dart';
 
 class ForecastView extends StatelessWidget {
   const ForecastView({
