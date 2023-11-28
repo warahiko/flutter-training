@@ -38,12 +38,7 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
       return 'Z';
     }
 
-    final String sign;
-    if (offset.isNegative) {
-      sign = '-';
-    } else {
-      sign = '+';
-    }
+    final sign = offset.isNegative ? '-' : '+';
 
     final hours = timeFormatter.format(inMinutes ~/ Duration.minutesPerHour);
     final minutes = timeFormatter.format(inMinutes % Duration.minutesPerHour);
