@@ -57,7 +57,9 @@ class MainScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final state = ref.watch(mainScreenStateNotifierProvider);
+    final forecast = ref.watch(
+      mainScreenStateNotifierProvider.select((value) => value.forecast),
+    );
 
     // build 完了後に発火するように listen
     ref.listen(
@@ -77,7 +79,7 @@ class MainScreen extends ConsumerWidget {
             children: [
               const Spacer(),
               ForecastView(
-                forecast: state.forecast,
+                forecast: forecast,
               ),
               Flexible(
                 child: Padding(
