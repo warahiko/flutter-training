@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/ui/main/provider/main_screen_state_notifier.dart';
 import 'package:flutter_training/ui/main/view/forecast_view.dart';
@@ -19,9 +18,6 @@ class MainScreen extends ConsumerWidget {
     String message,
   ) {
     unawaited(() async {
-      // Widget の build が完了するまで待つ
-      await SchedulerBinding.instance.endOfFrame;
-
       if (!context.mounted) {
         return;
       }
@@ -63,10 +59,15 @@ class MainScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(mainScreenStateNotifierProvider);
 
-    final errorMessage = state.errorMessage;
-    if (errorMessage != null) {
-      _showErrorDialog(context, ref, errorMessage);
-    }
+    // build 完了後に発火するように listen
+    ref.listen(
+      mainScreenStateNotifierProvider.select((value) => value.errorMessage),
+      (_, errorMessage) {
+        if (errorMessage != null) {
+          _showErrorDialog(context, ref, errorMessage);
+        }
+      },
+    );
 
     return Scaffold(
       body: Center(
