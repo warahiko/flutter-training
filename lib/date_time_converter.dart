@@ -21,7 +21,7 @@ class DateTimeConverter implements JsonConverter<DateTime, String> {
   DateTime fromJson(String json) {
     // DateFormat#parse() では UTC とローカルのタイムゾーン以外対応できない
     // DateTime.parse() はタイムゾーンを考慮した上で UTC に変更する
-    return DateTime.parse(json).toLocal();
+    return DateTime.parse(json);
   }
 
   @override
