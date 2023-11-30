@@ -27,7 +27,10 @@ class ForecastView extends StatelessWidget {
           aspectRatio: 1,
           child: _forecast == null
               ? const Placeholder()
-              : SvgPicture.asset(_forecast.weather.image),
+              : SvgPicture.asset(
+                  _forecast.weather.image,
+                  semanticsLabel: _forecast.weather.name,
+                ),
         ),
         const SizedBox(height: 16),
         Row(
