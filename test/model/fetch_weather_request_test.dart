@@ -106,7 +106,7 @@ class _DeserializeData {
     required this.expected,
   });
 
-  String description;
-  String dummy;
-  FetchWeatherRequest expected;
+  final String description;
+  final String dummy;
+  final FetchWeatherRequest expected;
 }
