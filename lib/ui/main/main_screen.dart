@@ -9,7 +9,9 @@ class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
   void _fetchForecast(WidgetRef ref) {
-    ref.read(mainScreenStateNotifierProvider.notifier).fetchWeather();
+    unawaited(
+      ref.read(mainScreenStateNotifierProvider.notifier).fetchWeather(),
+    );
   }
 
   void _showErrorDialog(

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_training/common/provider/date_time.dart';
 import 'package:flutter_training/model/fetch_weather_request.dart';
 import 'package:flutter_training/model/forecast.dart';
@@ -20,7 +21,7 @@ class MainScreenStateNotifier extends _$MainScreenStateNotifier {
     return MainScreenState.init;
   }
 
-  void fetchWeather() {
+  Future<void> fetchWeather() async {
     final requestString = FetchWeatherRequest(
       area: 'tokyo',
       date: _nowDateTime,
@@ -28,7 +29,10 @@ class MainScreenStateNotifier extends _$MainScreenStateNotifier {
 
     final Forecast newForecast;
     try {
-      final responseString = _yumemiWeather.fetchWeather(requestString);
+      final responseString = await compute(
+        _yumemiWeather.syncFetchWeather,
+        requestString,
+      );
       newForecast = Forecast.fromJsonString(responseString);
     } on YumemiWeatherError catch (e) {
       state = state.copyWith(errorMessage: e.toMessage());
