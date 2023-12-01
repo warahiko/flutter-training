@@ -6,5 +6,6 @@ analyzer:
     # https://riverpod.dev/docs/introduction/getting_started#enabling-riverpod_lintcustom_lint
     - custom_lint
   errors:
+    invalid_use_of_visible_for_testing_member: error
     # https://pub.dev/packages/freezed#install
     invalid_annotation_target: ignore

@@ -5,6 +5,7 @@ import 'package:flutter_training/common/provider/date_time.dart';
 import 'package:flutter_training/model/weather.dart';
 import 'package:flutter_training/repository/provider/yumemi_weather.dart';
 import 'package:flutter_training/ui/main/main_screen.dart';
+import 'package:flutter_training/ui/main/view/forecast_view.dart';
 import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -205,7 +206,7 @@ void main() {
 
         // Verify
         final maxTemperatureTextWidget = widgetTester.widget<Text>(
-          find.byKey(const Key('maxTemperatureText')),
+          find.byKey(ForecastView.maxTemperatureTextKey),
         );
 
         expect(
@@ -237,7 +238,7 @@ void main() {
 
         // Verify
         final minTemperatureTextWidget = widgetTester.widget<Text>(
-          find.byKey(const Key('minTemperatureText')),
+          find.byKey(ForecastView.minTemperatureTextKey),
         );
 
         expect(
