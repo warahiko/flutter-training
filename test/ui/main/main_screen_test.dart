@@ -204,11 +204,9 @@ void main() {
         await widgetTester.pump();
 
         // Verify
-        final maxTemperatureTextWidget = widgetTester
-            .element(
-              find.byKey(const Key('maxTemperatureText')),
-            )
-            .widget as Text;
+        final maxTemperatureTextWidget = widgetTester.widget<Text>(
+          find.byKey(const Key('maxTemperatureText')),
+        );
 
         expect(
           maxTemperatureTextWidget.data,
@@ -238,11 +236,9 @@ void main() {
         await widgetTester.pump();
 
         // Verify
-        final minTemperatureTextWidget = widgetTester
-            .element(
-              find.byKey(const Key('minTemperatureText')),
-            )
-            .widget as Text;
+        final minTemperatureTextWidget = widgetTester.widget<Text>(
+          find.byKey(const Key('minTemperatureText')),
+        );
 
         expect(
           minTemperatureTextWidget.data,
