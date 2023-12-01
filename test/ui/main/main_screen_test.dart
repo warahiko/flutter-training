@@ -29,9 +29,6 @@ void main() {
     List<Override> overrides = const [],
     List<NavigatorObserver> navigatorObservers = const [],
   }) async {
-    // デフォルトのサイズだとボタンが入り切っておらず tap() ができないため、サイズを大きくする
-    widgetTester.view.physicalSize = const Size(1080, 2400);
-
     await widgetTester.pumpWidget(
       ProviderScope(
         overrides: globalOverrides + overrides,
@@ -43,9 +40,19 @@ void main() {
     );
   }
 
+  final binding = TestWidgetsFlutterBinding.ensureInitialized();
+  final implicitView = binding.platformDispatcher.implicitView!;
+  setUp(() {
+    // デフォルトのサイズだとボタンが入り切っておらず tap() ができないため、サイズを大きくする
+    implicitView.physicalSize = const Size(1080, 2400);
+    implicitView.devicePixelRatio = 3.0;
+  });
   tearDown(() {
     reset(mockYumemiWeather);
     reset(mockNavigatorObserver);
+
+    implicitView.resetPhysicalSize();
+    implicitView.resetDevicePixelRatio();
   });
 
   testWidgets('クローズボタンを押下で画面を閉じる', (widgetTester) async {
