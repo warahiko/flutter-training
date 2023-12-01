@@ -10,6 +10,11 @@ class ForecastView extends StatelessWidget {
 
   final Forecast? _forecast;
 
+  @visibleForTesting
+  static final maxTemperatureTextKey = UniqueKey();
+  @visibleForTesting
+  static final minTemperatureTextKey = UniqueKey();
+
   String _toTemperatureString(int? temperature) {
     final temperatureValue =
         temperature == null ? '**' : temperature.toString();
@@ -27,7 +32,10 @@ class ForecastView extends StatelessWidget {
           aspectRatio: 1,
           child: _forecast == null
               ? const Placeholder()
-              : SvgPicture.asset(_forecast.weather.image),
+              : SvgPicture.asset(
+                  _forecast.weather.image,
+                  semanticsLabel: _forecast.weather.name,
+                ),
         ),
         const SizedBox(height: 16),
         Row(
@@ -39,6 +47,7 @@ class ForecastView extends StatelessWidget {
                   color: Colors.blue,
                 ),
                 textAlign: TextAlign.center,
+                key: minTemperatureTextKey,
               ),
             ),
             Expanded(
@@ -48,6 +57,7 @@ class ForecastView extends StatelessWidget {
                   color: Colors.red,
                 ),
                 textAlign: TextAlign.center,
+                key: maxTemperatureTextKey,
               ),
             ),
           ],
