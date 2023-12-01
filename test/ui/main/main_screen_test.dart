@@ -16,6 +16,9 @@ import 'main_screen_test.mocks.dart';
 @GenerateMocks([YumemiWeather])
 @GenerateNiceMocks([MockSpec<NavigatorObserver>()])
 void main() {
+  final mockYumemiWeather = MockYumemiWeather();
+  final mockNavigatorObserver = MockNavigatorObserver();
+
   final dummyDateTime = DateTime.utc(2023, 11, 30);
   final globalOverrides = <Override>[
     nowDateTimeProvider.overrideWithValue(dummyDateTime),
@@ -40,12 +43,15 @@ void main() {
     );
   }
 
+  tearDown(() {
+    reset(mockYumemiWeather);
+    reset(mockNavigatorObserver);
+  });
+
   testWidgets('クローズボタンを押下で画面を閉じる', (widgetTester) async {
     // Setup
     final dummyResponse = _createDummyFetchWeatherResponseString();
 
-    final mockNavigatorObserver = MockNavigatorObserver();
-    final mockYumemiWeather = MockYumemiWeather();
     when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
     await pumpMainScreen(
@@ -67,7 +73,6 @@ void main() {
     // Setup
     final dummyResponse = _createDummyFetchWeatherResponseString();
 
-    final mockYumemiWeather = MockYumemiWeather();
     when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
     await pumpMainScreen(
@@ -94,7 +99,6 @@ void main() {
           weatherCondition: 'sunny',
         );
 
-        final mockYumemiWeather = MockYumemiWeather();
         when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
         await pumpMainScreen(
@@ -123,7 +127,6 @@ void main() {
           weatherCondition: 'cloudy',
         );
 
-        final mockYumemiWeather = MockYumemiWeather();
         when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
         await pumpMainScreen(
@@ -152,7 +155,6 @@ void main() {
           weatherCondition: 'rainy',
         );
 
-        final mockYumemiWeather = MockYumemiWeather();
         when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
         await pumpMainScreen(
@@ -181,7 +183,6 @@ void main() {
           maxTemperature: '25',
         );
 
-        final mockYumemiWeather = MockYumemiWeather();
         when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
         await pumpMainScreen(
@@ -210,7 +211,6 @@ void main() {
           minTemperature: '-10',
         );
 
-        final mockYumemiWeather = MockYumemiWeather();
         when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
 
         await pumpMainScreen(
@@ -239,7 +239,6 @@ void main() {
         // Setup
         const dummyError = YumemiWeatherError.unknown;
 
-        final mockYumemiWeather = MockYumemiWeather();
         when(mockYumemiWeather.fetchWeather(any)).thenThrow(dummyError);
 
         await pumpMainScreen(
