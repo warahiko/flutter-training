@@ -204,9 +204,15 @@ void main() {
         await widgetTester.pump();
 
         // Verify
+        final maxTemperatureTextWidget = widgetTester
+            .element(
+              find.byKey(const Key('maxTemperatureText')),
+            )
+            .widget as Text;
+
         expect(
-          find.text('25 ℃'),
-          findsOneWidget,
+          maxTemperatureTextWidget.data,
+          '25 ℃',
         );
       },
     );
@@ -232,9 +238,15 @@ void main() {
         await widgetTester.pump();
 
         // Verify
+        final minTemperatureTextWidget = widgetTester
+            .element(
+              find.byKey(const Key('minTemperatureText')),
+            )
+            .widget as Text;
+
         expect(
-          find.text('-10 ℃'),
-          findsOneWidget,
+          minTemperatureTextWidget.data,
+          '-10 ℃',
         );
       },
     );

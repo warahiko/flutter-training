@@ -42,6 +42,7 @@ class ForecastView extends StatelessWidget {
                   color: Colors.blue,
                 ),
                 textAlign: TextAlign.center,
+                key: const Key('minTemperatureText'),
               ),
             ),
             Expanded(
@@ -51,6 +52,7 @@ class ForecastView extends StatelessWidget {
                   color: Colors.red,
                 ),
                 textAlign: TextAlign.center,
+                key: const Key('maxTemperatureText'),
               ),
             ),
           ],
