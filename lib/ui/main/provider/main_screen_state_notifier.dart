@@ -1,6 +1,6 @@
 import 'package:flutter_training/common/provider/date_time.dart';
 import 'package:flutter_training/model/forecast.dart';
-import 'package:flutter_training/repository/provider/yumemi_weather.dart';
+import 'package:flutter_training/repository/provider/yumemi_weather_repository.dart';
 import 'package:flutter_training/ui/main/model/main_screen_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
@@ -26,12 +26,11 @@ class MainScreenStateNotifier extends _$MainScreenStateNotifier {
 
     final Forecast newForecast;
     try {
-      newForecast = await ref.read(
-        syncFetchWeatherProvider(
-          area: 'tokyo',
-          dateTime: ref.read(nowDateTimeProvider),
-        ).future,
-      );
+      newForecast =
+          await ref.read(yumemiWeatherRepositoryProvider).syncFetchWeather(
+                area: 'tokyo',
+                dateTime: ref.read(nowDateTimeProvider),
+              );
     } on YumemiWeatherError catch (error, stackTrace) {
       state = state.copyWith(
         forecast: AsyncError<Forecast?>(error, stackTrace).copyWithPrevious(
