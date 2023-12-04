@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/ui/main/provider/main_screen_state_notifier.dart';
 import 'package:flutter_training/ui/main/view/forecast_view.dart';
+import 'package:flutter_training/yumemi_weather_error.dart';
+import 'package:yumemi_weather/yumemi_weather.dart';
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
@@ -48,8 +50,6 @@ class MainScreen extends ConsumerWidget {
           );
         },
       );
-
-      ref.read(mainScreenStateNotifierProvider.notifier).errorMessageShown();
     }());
   }
 
@@ -65,36 +65,51 @@ class MainScreen extends ConsumerWidget {
 
     // build 完了後に発火するように listen
     ref.listen(
-      mainScreenStateNotifierProvider.select((value) => value.errorMessage),
-      (_, errorMessage) {
-        if (errorMessage != null) {
-          _showErrorDialog(context, ref, errorMessage);
+      mainScreenStateNotifierProvider.select((value) => value.forecast),
+      (_, forecast) {
+        if (forecast is! AsyncError) {
+          return;
         }
+
+        final errorMessage = switch (forecast.error) {
+          final YumemiWeatherError e => e.toMessage(),
+          final Exception _ => '不明なエラーです。',
+          _ => throw StateError('Invalid'),
+        };
+        _showErrorDialog(context, ref, errorMessage);
       },
     );
 
     return Scaffold(
-      body: Center(
-        child: FractionallySizedBox(
-          widthFactor: 0.5,
-          child: Column(
-            children: [
-              const Spacer(),
-              ForecastView(
-                forecast: forecast,
-              ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 80),
-                  child: _OperationButtonSet(
-                    onClose: () => _close(context),
-                    onReload: () => _fetchForecast(ref),
+      body: Stack(
+        children: [
+          Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.5,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  ForecastView(
+                    forecast: forecast.valueOrNull,
                   ),
-                ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 80),
+                      child: _OperationButtonSet(
+                        onClose: () => _close(context),
+                        onReload: () => _fetchForecast(ref),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          if (forecast.isLoading)
+            const Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }

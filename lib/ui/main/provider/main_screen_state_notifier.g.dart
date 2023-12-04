@@ -9,7 +9,7 @@ part of 'main_screen_state_notifier.dart';
 // **************************************************************************
 
 String _$mainScreenStateNotifierHash() =>
-    r'a6b9f8ffeb42475952e60b2ed573219db567863e';
+    r'a28b3ac6d0ca38755e966b2e686fd552aee01430';
 
 /// See also [MainScreenStateNotifier].
 @ProviderFor(MainScreenStateNotifier)

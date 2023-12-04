@@ -16,8 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$MainScreenState {
-  Forecast? get forecast => throw _privateConstructorUsedError;
-  String? get errorMessage => throw _privateConstructorUsedError;
+  AsyncValue<Forecast?> get forecast => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MainScreenStateCopyWith<MainScreenState> get copyWith =>
@@ -30,9 +29,7 @@ abstract class $MainScreenStateCopyWith<$Res> {
           MainScreenState value, $Res Function(MainScreenState) then) =
       _$MainScreenStateCopyWithImpl<$Res, MainScreenState>;
   @useResult
-  $Res call({Forecast? forecast, String? errorMessage});
-
-  $ForecastCopyWith<$Res>? get forecast;
+  $Res call({AsyncValue<Forecast?> forecast});
 }
 
 /// @nodoc
@@ -48,31 +45,14 @@ class _$MainScreenStateCopyWithImpl<$Res, $Val extends MainScreenState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? forecast = freezed,
-    Object? errorMessage = freezed,
+    Object? forecast = null,
   }) {
     return _then(_value.copyWith(
-      forecast: freezed == forecast
+      forecast: null == forecast
           ? _value.forecast
           : forecast // ignore: cast_nullable_to_non_nullable
-              as Forecast?,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as AsyncValue<Forecast?>,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $ForecastCopyWith<$Res>? get forecast {
-    if (_value.forecast == null) {
-      return null;
-    }
-
-    return $ForecastCopyWith<$Res>(_value.forecast!, (value) {
-      return _then(_value.copyWith(forecast: value) as $Val);
-    });
   }
 }
 
@@ -84,10 +64,7 @@ abstract class _$$MainScreenStateImplCopyWith<$Res>
       __$$MainScreenStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Forecast? forecast, String? errorMessage});
-
-  @override
-  $ForecastCopyWith<$Res>? get forecast;
+  $Res call({AsyncValue<Forecast?> forecast});
 }
 
 /// @nodoc
@@ -101,18 +78,13 @@ class __$$MainScreenStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? forecast = freezed,
-    Object? errorMessage = freezed,
+    Object? forecast = null,
   }) {
     return _then(_$MainScreenStateImpl(
-      forecast: freezed == forecast
+      forecast: null == forecast
           ? _value.forecast
           : forecast // ignore: cast_nullable_to_non_nullable
-              as Forecast?,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as AsyncValue<Forecast?>,
     ));
   }
 }
@@ -120,17 +92,14 @@ class __$$MainScreenStateImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$MainScreenStateImpl implements _MainScreenState {
-  const _$MainScreenStateImpl(
-      {required this.forecast, required this.errorMessage});
+  const _$MainScreenStateImpl({required this.forecast});
 
   @override
-  final Forecast? forecast;
-  @override
-  final String? errorMessage;
+  final AsyncValue<Forecast?> forecast;
 
   @override
   String toString() {
-    return 'MainScreenState(forecast: $forecast, errorMessage: $errorMessage)';
+    return 'MainScreenState(forecast: $forecast)';
   }
 
   @override
@@ -139,13 +108,11 @@ class _$MainScreenStateImpl implements _MainScreenState {
         (other.runtimeType == runtimeType &&
             other is _$MainScreenStateImpl &&
             (identical(other.forecast, forecast) ||
-                other.forecast == forecast) &&
-            (identical(other.errorMessage, errorMessage) ||
-                other.errorMessage == errorMessage));
+                other.forecast == forecast));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, forecast, errorMessage);
+  int get hashCode => Object.hash(runtimeType, forecast);
 
   @JsonKey(ignore: true)
   @override
@@ -157,13 +124,10 @@ class _$MainScreenStateImpl implements _MainScreenState {
 
 abstract class _MainScreenState implements MainScreenState {
   const factory _MainScreenState(
-      {required final Forecast? forecast,
-      required final String? errorMessage}) = _$MainScreenStateImpl;
+      {required final AsyncValue<Forecast?> forecast}) = _$MainScreenStateImpl;
 
   @override
-  Forecast? get forecast;
-  @override
-  String? get errorMessage;
+  AsyncValue<Forecast?> get forecast;
   @override
   @JsonKey(ignore: true)
   _$$MainScreenStateImplCopyWith<_$MainScreenStateImpl> get copyWith =>
