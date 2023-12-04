@@ -80,6 +80,7 @@ class MainScreen extends ConsumerWidget {
       },
     );
 
+    final theme = Theme.of(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -106,8 +107,20 @@ class MainScreen extends ConsumerWidget {
             ),
           ),
           if (forecast.isLoading)
-            const Center(
-              child: CircularProgressIndicator(),
+            ColoredBox(
+              color: Colors.black54,
+              child: Center(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.background,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(32),
+                    child: CircularProgressIndicator(),
+                  ),
+                ),
+              ),
             ),
         ],
       ),
