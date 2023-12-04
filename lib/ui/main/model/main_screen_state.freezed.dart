@@ -14,16 +14,11 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-MainScreenState _$MainScreenStateFromJson(Map<String, dynamic> json) {
-  return _MainScreenState.fromJson(json);
-}
-
 /// @nodoc
 mixin _$MainScreenState {
   Forecast? get forecast => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $MainScreenStateCopyWith<MainScreenState> get copyWith =>
       throw _privateConstructorUsedError;
@@ -123,13 +118,10 @@ class __$$MainScreenStateImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
 class _$MainScreenStateImpl implements _MainScreenState {
   const _$MainScreenStateImpl(
       {required this.forecast, required this.errorMessage});
-
-  factory _$MainScreenStateImpl.fromJson(Map<String, dynamic> json) =>
-      _$$MainScreenStateImplFromJson(json);
 
   @override
   final Forecast? forecast;
@@ -152,7 +144,6 @@ class _$MainScreenStateImpl implements _MainScreenState {
                 other.errorMessage == errorMessage));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, forecast, errorMessage);
 
@@ -162,22 +153,12 @@ class _$MainScreenStateImpl implements _MainScreenState {
   _$$MainScreenStateImplCopyWith<_$MainScreenStateImpl> get copyWith =>
       __$$MainScreenStateImplCopyWithImpl<_$MainScreenStateImpl>(
           this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$MainScreenStateImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _MainScreenState implements MainScreenState {
   const factory _MainScreenState(
       {required final Forecast? forecast,
       required final String? errorMessage}) = _$MainScreenStateImpl;
-
-  factory _MainScreenState.fromJson(Map<String, dynamic> json) =
-      _$MainScreenStateImpl.fromJson;
 
   @override
   Forecast? get forecast;
