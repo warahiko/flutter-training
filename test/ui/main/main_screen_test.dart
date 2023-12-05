@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_training/common/provider/date_time.dart';
+import 'package:flutter_training/model/forecast.dart';
 import 'package:flutter_training/model/weather.dart';
-import 'package:flutter_training/repository/provider/yumemi_weather.dart';
+import 'package:flutter_training/repository/provider/yumemi_weather_repository.dart';
+import 'package:flutter_training/repository/yumemi_weather_repository.dart';
 import 'package:flutter_training/ui/main/main_screen.dart';
 import 'package:flutter_training/ui/main/view/forecast_view.dart';
 import 'package:flutter_training/yumemi_weather_error.dart';
@@ -11,13 +13,12 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:yumemi_weather/yumemi_weather.dart';
 
-import '../../util/string_ext.dart';
 import 'main_screen_test.mocks.dart';
 
-@GenerateMocks([YumemiWeather])
+@GenerateMocks([YumemiWeatherRepository])
 @GenerateNiceMocks([MockSpec<NavigatorObserver>()])
 void main() {
-  final mockYumemiWeather = MockYumemiWeather();
+  final mockYumemiWeatherRepository = MockYumemiWeatherRepository();
   final mockNavigatorObserver = MockNavigatorObserver();
 
   final dummyDateTime = DateTime.utc(2023, 11, 30);
@@ -49,7 +50,7 @@ void main() {
     implicitView.devicePixelRatio = 3.0;
   });
   tearDown(() {
-    reset(mockYumemiWeather);
+    reset(mockYumemiWeatherRepository);
     reset(mockNavigatorObserver);
 
     implicitView.resetPhysicalSize();
@@ -58,15 +59,8 @@ void main() {
 
   testWidgets('クローズボタンを押下で画面を閉じる', (widgetTester) async {
     // Setup
-    final dummyResponse = _createDummyFetchWeatherResponseString();
-
-    when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
-
     await pumpMainScreen(
       widgetTester,
-      overrides: [
-        yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
-      ],
       navigatorObservers: [mockNavigatorObserver],
     );
 
@@ -79,14 +73,20 @@ void main() {
   });
   testWidgets('リロードボタンを押下で天気予報の取得を行う', (widgetTester) async {
     // Setup
-    final dummyResponse = _createDummyFetchWeatherResponseString();
+    final dummyResponse = _createDummyForecast();
 
-    when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+    when(
+      mockYumemiWeatherRepository.syncFetchWeather(
+        area: anyNamed('area'),
+        dateTime: anyNamed('dateTime'),
+      ),
+    ).thenAnswer((_) async => dummyResponse);
 
     await pumpMainScreen(
       widgetTester,
       overrides: [
-        yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+        yumemiWeatherRepositoryProvider
+            .overrideWithValue(mockYumemiWeatherRepository),
       ],
     );
 
@@ -95,24 +95,35 @@ void main() {
     await widgetTester.pump();
 
     // Verify
-    verify(mockYumemiWeather.fetchWeather(any)).called(1);
+    verify(
+      mockYumemiWeatherRepository.syncFetchWeather(
+        area: anyNamed('area'),
+        dateTime: anyNamed('dateTime'),
+      ),
+    ).called(1);
   });
   group('天気予報の取得に成功した場合', () {
     testWidgets(
       '晴れの場合、天気予報画面に晴れの画像が表示される',
       (widgetTester) async {
         // Setup
-        final dummyResponse = _createDummyFetchWeatherResponseString(
+        final dummyResponse = _createDummyForecast(
           // ignore: avoid_redundant_argument_values
-          weatherCondition: 'sunny',
+          weather: Weather.sunny,
         );
 
-        when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+        when(
+          mockYumemiWeatherRepository.syncFetchWeather(
+            area: anyNamed('area'),
+            dateTime: anyNamed('dateTime'),
+          ),
+        ).thenAnswer((_) async => dummyResponse);
 
         await pumpMainScreen(
           widgetTester,
           overrides: [
-            yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+            yumemiWeatherRepositoryProvider
+                .overrideWithValue(mockYumemiWeatherRepository),
           ],
         );
 
@@ -131,16 +142,22 @@ void main() {
       '曇りの場合、天気予報画面に曇りの画像が表示される',
       (widgetTester) async {
         // Setup
-        final dummyResponse = _createDummyFetchWeatherResponseString(
-          weatherCondition: 'cloudy',
+        final dummyResponse = _createDummyForecast(
+          weather: Weather.cloudy,
         );
 
-        when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+        when(
+          mockYumemiWeatherRepository.syncFetchWeather(
+            area: anyNamed('area'),
+            dateTime: anyNamed('dateTime'),
+          ),
+        ).thenAnswer((_) async => dummyResponse);
 
         await pumpMainScreen(
           widgetTester,
           overrides: [
-            yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+            yumemiWeatherRepositoryProvider
+                .overrideWithValue(mockYumemiWeatherRepository),
           ],
         );
 
@@ -159,16 +176,22 @@ void main() {
       '雨の場合、天気予報画面に雨の画像が表示される',
       (widgetTester) async {
         // Setup
-        final dummyResponse = _createDummyFetchWeatherResponseString(
-          weatherCondition: 'rainy',
+        final dummyResponse = _createDummyForecast(
+          weather: Weather.rainy,
         );
 
-        when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+        when(
+          mockYumemiWeatherRepository.syncFetchWeather(
+            area: anyNamed('area'),
+            dateTime: anyNamed('dateTime'),
+          ),
+        ).thenAnswer((_) async => dummyResponse);
 
         await pumpMainScreen(
           widgetTester,
           overrides: [
-            yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+            yumemiWeatherRepositoryProvider
+                .overrideWithValue(mockYumemiWeatherRepository),
           ],
         );
 
@@ -187,16 +210,22 @@ void main() {
       '天気予報画面に最高気温が表示される',
       (widgetTester) async {
         // Setup
-        final dummyResponse = _createDummyFetchWeatherResponseString(
-          maxTemperature: '25',
+        final dummyResponse = _createDummyForecast(
+          maxTemperature: 25,
         );
 
-        when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+        when(
+          mockYumemiWeatherRepository.syncFetchWeather(
+            area: anyNamed('area'),
+            dateTime: anyNamed('dateTime'),
+          ),
+        ).thenAnswer((_) async => dummyResponse);
 
         await pumpMainScreen(
           widgetTester,
           overrides: [
-            yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+            yumemiWeatherRepositoryProvider
+                .overrideWithValue(mockYumemiWeatherRepository),
           ],
         );
 
@@ -219,16 +248,22 @@ void main() {
       '天気予報画面に最低気温が表示される',
       (widgetTester) async {
         // Setup
-        final dummyResponse = _createDummyFetchWeatherResponseString(
-          minTemperature: '-10',
+        final dummyResponse = _createDummyForecast(
+          minTemperature: -10,
         );
 
-        when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+        when(
+          mockYumemiWeatherRepository.syncFetchWeather(
+            area: anyNamed('area'),
+            dateTime: anyNamed('dateTime'),
+          ),
+        ).thenAnswer((_) async => dummyResponse);
 
         await pumpMainScreen(
           widgetTester,
           overrides: [
-            yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+            yumemiWeatherRepositoryProvider
+                .overrideWithValue(mockYumemiWeatherRepository),
           ],
         );
 
@@ -255,12 +290,18 @@ void main() {
         // Setup
         const dummyError = YumemiWeatherError.unknown;
 
-        when(mockYumemiWeather.fetchWeather(any)).thenThrow(dummyError);
+        when(
+          mockYumemiWeatherRepository.syncFetchWeather(
+            area: anyNamed('area'),
+            dateTime: anyNamed('dateTime'),
+          ),
+        ).thenThrow(dummyError);
 
         await pumpMainScreen(
           widgetTester,
           overrides: [
-            yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
+            yumemiWeatherRepositoryProvider
+                .overrideWithValue(mockYumemiWeatherRepository),
           ],
         );
 
@@ -287,16 +328,13 @@ void main() {
   });
 }
 
-String _createDummyFetchWeatherResponseString({
-  String weatherCondition = 'sunny',
-  String maxTemperature = '40',
-  String minTemperature = '-40',
+Forecast _createDummyForecast({
+  Weather weather = Weather.sunny,
+  int maxTemperature = 40,
+  int minTemperature = -40,
 }) =>
-    '''
-    {
-      "weather_condition": "$weatherCondition",
-      "max_temperature": $maxTemperature,
-      "min_temperature": $minTemperature
-    }
-'''
-        .trimSpace();
+    Forecast(
+      weather: weather,
+      maxTemperature: maxTemperature,
+      minTemperature: minTemperature,
+    );

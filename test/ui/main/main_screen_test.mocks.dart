@@ -3,10 +3,13 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/src/widgets/navigator.dart' as _i4;
+import 'dart:async' as _i4;
+
+import 'package:flutter/src/widgets/navigator.dart' as _i5;
+import 'package:flutter_training/model/forecast.dart' as _i2;
+import 'package:flutter_training/repository/yumemi_weather_repository.dart'
+    as _i3;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i3;
-import 'package:yumemi_weather/src/yumemi_weather_base.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -21,83 +24,61 @@ import 'package:yumemi_weather/src/yumemi_weather_base.dart' as _i2;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-/// A class which mocks [YumemiWeather].
+class _FakeForecast_0 extends _i1.SmartFake implements _i2.Forecast {
+  _FakeForecast_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+/// A class which mocks [YumemiWeatherRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockYumemiWeather extends _i1.Mock implements _i2.YumemiWeather {
-  MockYumemiWeather() {
+class MockYumemiWeatherRepository extends _i1.Mock
+    implements _i3.YumemiWeatherRepository {
+  MockYumemiWeatherRepository() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  String fetchSimpleWeather() => (super.noSuchMethod(
-        Invocation.method(
-          #fetchSimpleWeather,
-          [],
-        ),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.method(
-            #fetchSimpleWeather,
-            [],
-          ),
-        ),
-      ) as String);
-
-  @override
-  String fetchThrowsWeather(String? area) => (super.noSuchMethod(
-        Invocation.method(
-          #fetchThrowsWeather,
-          [area],
-        ),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.method(
-            #fetchThrowsWeather,
-            [area],
-          ),
-        ),
-      ) as String);
-
-  @override
-  String fetchWeather(String? jsonString) => (super.noSuchMethod(
-        Invocation.method(
-          #fetchWeather,
-          [jsonString],
-        ),
-        returnValue: _i3.dummyValue<String>(
-          this,
-          Invocation.method(
-            #fetchWeather,
-            [jsonString],
-          ),
-        ),
-      ) as String);
-
-  @override
-  String syncFetchWeather(String? jsonString) => (super.noSuchMethod(
+  _i4.Future<_i2.Forecast> syncFetchWeather({
+    required String? area,
+    required DateTime? dateTime,
+  }) =>
+      (super.noSuchMethod(
         Invocation.method(
           #syncFetchWeather,
-          [jsonString],
+          [],
+          {
+            #area: area,
+            #dateTime: dateTime,
+          },
         ),
-        returnValue: _i3.dummyValue<String>(
+        returnValue: _i4.Future<_i2.Forecast>.value(_FakeForecast_0(
           this,
           Invocation.method(
             #syncFetchWeather,
-            [jsonString],
+            [],
+            {
+              #area: area,
+              #dateTime: dateTime,
+            },
           ),
-        ),
-      ) as String);
+        )),
+      ) as _i4.Future<_i2.Forecast>);
 }
 
 /// A class which mocks [NavigatorObserver].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
+class MockNavigatorObserver extends _i1.Mock implements _i5.NavigatorObserver {
   @override
   void didPush(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i5.Route<dynamic>? route,
+    _i5.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -112,8 +93,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didPop(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i5.Route<dynamic>? route,
+    _i5.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -128,8 +109,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didRemove(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i5.Route<dynamic>? route,
+    _i5.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(
@@ -144,8 +125,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didReplace({
-    _i4.Route<dynamic>? newRoute,
-    _i4.Route<dynamic>? oldRoute,
+    _i5.Route<dynamic>? newRoute,
+    _i5.Route<dynamic>? oldRoute,
   }) =>
       super.noSuchMethod(
         Invocation.method(
@@ -161,8 +142,8 @@ class MockNavigatorObserver extends _i1.Mock implements _i4.NavigatorObserver {
 
   @override
   void didStartUserGesture(
-    _i4.Route<dynamic>? route,
-    _i4.Route<dynamic>? previousRoute,
+    _i5.Route<dynamic>? route,
+    _i5.Route<dynamic>? previousRoute,
   ) =>
       super.noSuchMethod(
         Invocation.method(

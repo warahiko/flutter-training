@@ -1,9 +1,9 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/common/provider/date_time.dart';
 import 'package:flutter_training/model/forecast.dart';
 import 'package:flutter_training/model/weather.dart';
 import 'package:flutter_training/repository/provider/yumemi_weather.dart';
 import 'package:flutter_training/ui/main/provider/main_screen_state_notifier.dart';
-import 'package:flutter_training/yumemi_weather_error.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:test/test.dart';
@@ -15,7 +15,7 @@ import 'main_screen_state_notifier_test.mocks.dart';
 @GenerateMocks([YumemiWeather])
 void main() {
   group('fetchForecast()', () {
-    test('成功した場合、天気予報結果が渡される', () {
+    test('成功した場合、天気予報結果が渡される', () async {
       // Setup
       final dummyDateTime = DateTime.utc(2023, 11, 30);
       const dummyResponse = '''
@@ -31,7 +31,7 @@ void main() {
       );
 
       final mockYumemiWeather = MockYumemiWeather();
-      when(mockYumemiWeather.fetchWeather(any)).thenReturn(dummyResponse);
+      when(mockYumemiWeather.syncFetchWeather(any)).thenReturn(dummyResponse);
 
       // https://riverpod.dev/docs/essentials/testing#mocking-providers
       final container = createContainer(
@@ -40,32 +40,31 @@ void main() {
           yumemiWeatherProvider.overrideWithValue(mockYumemiWeather),
         ],
       );
-      // https://docs-v2.riverpod.dev/docs/essentials/testing#unit-tests
+      // https://riverpod.dev/docs/essentials/testing#unit-tests
       // provider が dispose されないように listen
       final subscription =
           container.listen(mainScreenStateNotifierProvider, (_, __) {});
 
       // Exercise
-      container.read(mainScreenStateNotifierProvider.notifier).fetchWeather();
+      await container
+          .read(mainScreenStateNotifierProvider.notifier)
+          .fetchWeather();
 
       // Verify
       expect(
-        subscription.read().errorMessage,
-        null,
-      );
-      expect(
         subscription.read().forecast,
-        expected,
+        isA<AsyncData<Forecast?>>()
+            .having((it) => it.value, 'forecast', expected),
       );
     });
-    test('失敗した場合、エラーメッセージが渡される', () {
+    test('失敗した場合、エラーメッセージが渡される', () async {
       // Setup
       final dummyDateTime = DateTime.utc(2023, 11, 30);
       const dummyError = YumemiWeatherError.unknown;
-      final expected = YumemiWeatherError.unknown.toMessage();
+      const expected = YumemiWeatherError.unknown;
 
       final mockYumemiWeather = MockYumemiWeather();
-      when(mockYumemiWeather.fetchWeather(any)).thenThrow(dummyError);
+      when(mockYumemiWeather.syncFetchWeather(any)).thenThrow(dummyError);
 
       // https://riverpod.dev/docs/essentials/testing#mocking-providers
       final container = createContainer(
@@ -78,16 +77,15 @@ void main() {
           container.listen(mainScreenStateNotifierProvider, (_, __) {});
 
       // Exercise
-      container.read(mainScreenStateNotifierProvider.notifier).fetchWeather();
+      await container
+          .read(mainScreenStateNotifierProvider.notifier)
+          .fetchWeather();
 
       // Verify
       expect(
-        subscription.read().errorMessage,
-        expected,
-      );
-      expect(
         subscription.read().forecast,
-        null,
+        isA<AsyncError<Forecast?>>()
+            .having((it) => it.error, 'error', expected),
       );
     });
   });
