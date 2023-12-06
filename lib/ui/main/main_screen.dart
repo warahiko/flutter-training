@@ -4,12 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_training/ui/main/provider/main_screen_state_notifier.dart';
 import 'package:flutter_training/ui/main/view/forecast_view.dart';
+import 'package:flutter_training/yumemi_weather_error.dart';
+import 'package:yumemi_weather/yumemi_weather.dart';
 
 class MainScreen extends ConsumerWidget {
   const MainScreen({super.key});
 
   void _fetchForecast(WidgetRef ref) {
-    ref.read(mainScreenStateNotifierProvider.notifier).fetchWeather();
+    unawaited(
+      ref.read(mainScreenStateNotifierProvider.notifier).fetchWeather(),
+    );
   }
 
   void _showErrorDialog(
@@ -46,8 +50,6 @@ class MainScreen extends ConsumerWidget {
           );
         },
       );
-
-      ref.read(mainScreenStateNotifierProvider.notifier).errorMessageShown();
     }());
   }
 
@@ -63,36 +65,64 @@ class MainScreen extends ConsumerWidget {
 
     // build 完了後に発火するように listen
     ref.listen(
-      mainScreenStateNotifierProvider.select((value) => value.errorMessage),
-      (_, errorMessage) {
-        if (errorMessage != null) {
-          _showErrorDialog(context, ref, errorMessage);
+      mainScreenStateNotifierProvider.select((value) => value.forecast),
+      (_, forecast) {
+        if (forecast is! AsyncError) {
+          return;
         }
+
+        final errorMessage = switch (forecast.error) {
+          final YumemiWeatherError e => e.toMessage(),
+          final Exception _ => '不明なエラーです。',
+          _ => throw StateError('Invalid'),
+        };
+        _showErrorDialog(context, ref, errorMessage);
       },
     );
 
+    final theme = Theme.of(context);
     return Scaffold(
-      body: Center(
-        child: FractionallySizedBox(
-          widthFactor: 0.5,
-          child: Column(
-            children: [
-              const Spacer(),
-              ForecastView(
-                forecast: forecast,
+      body: Stack(
+        children: [
+          Center(
+            child: FractionallySizedBox(
+              widthFactor: 0.5,
+              child: Column(
+                children: [
+                  const Spacer(),
+                  ForecastView(
+                    forecast: forecast.valueOrNull,
+                  ),
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 80),
+                      child: _OperationButtonSet(
+                        onClose: () => _close(context),
+                        onReload: () => _fetchForecast(ref),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 80),
-                  child: _OperationButtonSet(
-                    onClose: () => _close(context),
-                    onReload: () => _fetchForecast(ref),
+            ),
+          ),
+          if (forecast.isLoading)
+            ColoredBox(
+              color: Colors.black54,
+              child: Center(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.background,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(32),
+                    child: CircularProgressIndicator(),
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+        ],
       ),
     );
   }

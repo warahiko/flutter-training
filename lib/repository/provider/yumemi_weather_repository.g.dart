@@ -2,28 +2,29 @@
 
 // ignore_for_file: type=lint, duplicate_ignore
 
-part of 'main_screen_state_notifier.dart';
+part of 'yumemi_weather_repository.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$mainScreenStateNotifierHash() =>
-    r'e55ab4f953bdd45c7749a9af8dcaf98dfcffc450';
+String _$yumemiWeatherRepositoryHash() =>
+    r'590343dd5517196d47fc328a237314253e996b6b';
 
-/// See also [MainScreenStateNotifier].
-@ProviderFor(MainScreenStateNotifier)
-final mainScreenStateNotifierProvider = AutoDisposeNotifierProvider<
-    MainScreenStateNotifier, MainScreenState>.internal(
-  MainScreenStateNotifier.new,
-  name: r'mainScreenStateNotifierProvider',
+/// See also [yumemiWeatherRepository].
+@ProviderFor(yumemiWeatherRepository)
+final yumemiWeatherRepositoryProvider =
+    AutoDisposeProvider<YumemiWeatherRepository>.internal(
+  yumemiWeatherRepository,
+  name: r'yumemiWeatherRepositoryProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$mainScreenStateNotifierHash,
+      : _$yumemiWeatherRepositoryHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$MainScreenStateNotifier = AutoDisposeNotifier<MainScreenState>;
+typedef YumemiWeatherRepositoryRef
+    = AutoDisposeProviderRef<YumemiWeatherRepository>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member
